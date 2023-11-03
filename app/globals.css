@@ -25,6 +25,9 @@
   p {
     @apply text-sm text-default-text;
   }
+  input {
+    @apply focus:outline-none p-2 md:w-[600px] rounded placeholder:text-gray-50 bg-slate-600;
+  }
 }
 
 @layer components {
