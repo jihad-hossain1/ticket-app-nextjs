@@ -25,6 +25,7 @@
   p {
     @apply text-sm text-default-text;
   }
+  textarea,
   input {
     @apply focus:outline-none p-2 md:w-[600px] rounded placeholder:text-gray-50 bg-slate-600;
   }

@@ -1,8 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const TicketForm = () => {
+  const router = useRouter();
+  //handle get input function
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -11,7 +14,22 @@ const TicketForm = () => {
       [name]: value,
     }));
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`/api/tickets`, {
+      method: "POST",
+      body: JSON.stringify({ formData }),
+      "Content-type": "application/json",
+    });
 
+    if (!res.ok) {
+      throw new Error("Ops! failed to create ticket.");
+    }
+
+    router.refresh();
+    router.push("/");
+  };
+  // scaffolding
   const startingTicketData = {
     title: "",
     description: "",
@@ -20,28 +38,139 @@ const TicketForm = () => {
     categroy: "Hardware Problem",
     status: "not started",
   };
-
+  // form state
   const [formData, setFormData] = useState(startingTicketData);
 
   console.log(formData);
   return (
     <div className="flex justify-center mt-16">
-      <form>
+      <form
+        method="post"
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-3 w-1/2"
+      >
         <h3 className="my-6">Create Your Ticket</h3>
-        <div className="grid mb-4 w-full">
-          <label htmlFor="">Title</label>
 
-          <input
-            className=""
-            type="text"
-            id="title"
-            name="title"
-            required={true}
-            value={formData.title}
-            onChange={handleChange}
-          />
+        <label htmlFor="">Title</label>
+
+        <input
+          className=""
+          type="text"
+          id="title"
+          name="title"
+          required={true}
+          value={formData.title}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="">Description</label>
+
+        <textarea
+          className=""
+          type="text"
+          id="description"
+          name="description"
+          required={true}
+          value={formData.description}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="">categroy</label>
+        <select
+          className="bg-card"
+          name="categroy"
+          value={formData.categroy}
+          onChange={handleChange}
+        >
+          <option value="Hardware Problem">Hardware Problem</option>
+          <option value="Software Problem">Software Problem</option>
+          <option value="Project">Project</option>
+        </select>
+
+        <label htmlFor="">Progress</label>
+        <input
+          type="range"
+          name="progress"
+          value={formData.progress}
+          min="0"
+          max="100"
+          id="progress"
+          onChange={handleChange}
+        />
+        <div className="flex flex-col">
+          <label htmlFor="">priority</label>
+
+          <div className="flex">
+            <input
+              className="inline-block"
+              type="radio"
+              id="priority"
+              name="priority"
+              required={true}
+              value={1}
+              checked={formData.priority == 1}
+              onChange={handleChange}
+            />
+            <label htmlFor="">1</label>
+            <input
+              className="inline-block"
+              type="radio"
+              id="priority"
+              name="priority"
+              required={true}
+              value={2}
+              checked={formData.priority == 2}
+              onChange={handleChange}
+            />
+            <label htmlFor="">2</label>
+            <input
+              className="inline-block"
+              type="radio"
+              id="priority"
+              name="priority"
+              required={true}
+              value={3}
+              checked={formData.priority == 3}
+              onChange={handleChange}
+            />
+            <label htmlFor="">3</label>
+            <input
+              className=""
+              type="radio"
+              id="priority"
+              name="priority"
+              required={true}
+              value={4}
+              checked={formData.priority == 4}
+              onChange={handleChange}
+            />
+            <label htmlFor="">4</label>
+            <input
+              className="inline-block"
+              type="radio"
+              id="priority"
+              name="priority"
+              required={true}
+              value={5}
+              checked={formData.priority == 5}
+              onChange={handleChange}
+            />
+            <label htmlFor="">5</label>
+          </div>
         </div>
-        <input type="submit" value="create" className="btn" />
+        <label htmlFor="">Status</label>
+        <select
+          className="bg-card"
+          name="status"
+          id="status"
+          value={formData.status}
+          onChange={handleChange}
+        >
+          <option value="not started">not started</option>
+          <option value="started">started</option>
+          <option value="done">done</option>
+        </select>
+        <input type="submit" value="create ticket" className="btn" />
       </form>
     </div>
   );
